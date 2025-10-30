@@ -4,7 +4,6 @@ pipeline {
     stages {
         stage('Stop old process') {
             steps {
-                echo 'Stopping any old Node.js process...'
                 bat 'taskkill /IM node.exe /F || exit 0'
             }
         }
@@ -18,10 +17,9 @@ pipeline {
 
         stage('Run App') {
             steps {
-                echo 'Starting Node app on port 3000 (background)...'
-                bat 'start /B cmd /c "npm start"'
-                bat 'ping 127.0.0.1 -n 6 >NUL'
-                echo '✅ Node app should now be running on http://localhost:3000'
+                echo 'Starting Node app on port 3000 (detached)...'
+                bat 'start cmd /c "npm start > output.log 2>&1"'
+                echo '✅ Node app started in background on port 3000'
             }
         }
     }
