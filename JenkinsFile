@@ -2,6 +2,12 @@ pipeline {
     agent any
 
     stages {
+        stage('Stop old process') {
+            steps {
+                bat 'taskkill /IM node.exe /F || exit 0'
+            }
+        }
+
         stage('Install dependencies') {
             steps {
                 echo 'Installing Node modules...'
@@ -12,7 +18,6 @@ pipeline {
         stage('Run App') {
             steps {
                 echo 'Starting Node app on port 3000...'
-                // Start Node.js in new window (Windows)
                 bat 'start "" cmd /c "npm start"'
             }
         }
