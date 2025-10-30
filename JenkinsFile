@@ -5,7 +5,6 @@ pipeline {
         stage('Stop old process') {
             steps {
                 echo 'Stopping any old Node.js process...'
-                // Kill existing node.exe processes (ignore error if none found)
                 bat 'taskkill /IM node.exe /F || exit 0'
             }
         }
@@ -20,12 +19,8 @@ pipeline {
         stage('Run App') {
             steps {
                 echo 'Starting Node app on port 3000 (background)...'
-                // Run npm start silently in the background (no prompt)
                 bat 'start /B cmd /c "npm start"'
-                
-                // Optional: Wait a few seconds to ensure app starts
-                bat 'timeout /t 5 >nul'
-                
+                bat 'ping 127.0.0.1 -n 6 >NUL'
                 echo '✅ Node app should now be running on http://localhost:3000'
             }
         }
