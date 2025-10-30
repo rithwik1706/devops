@@ -4,6 +4,7 @@ pipeline {
     stages {
         stage('Stop old process') {
             steps {
+                echo 'Stopping any old Node.js process...'
                 bat 'taskkill /IM node.exe /F || exit 0'
             }
         }
@@ -17,9 +18,10 @@ pipeline {
 
         stage('Run App') {
             steps {
-                echo 'Starting Node app on port 3000 (detached)...'
-                bat 'start cmd /c "npm start > output.log 2>&1"'
-                echo '✅ Node app started in background on port 3000'
+                echo 'Starting Node app on port 3000 (background)...'
+                // Start minimized, detached from Jenkins
+                bat 'start /MIN cmd /c "node index.js > output.log 2>&1"'
+                echo '✅ Node app started in background — check output.log for details.'
             }
         }
     }
