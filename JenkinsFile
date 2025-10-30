@@ -19,9 +19,17 @@ pipeline {
         stage('Run App') {
             steps {
                 echo 'Starting Node app on port 3000 (background)...'
-                // Start minimized, detached from Jenkins
-                bat 'start /MIN cmd /c "node index.js > output.log 2>&1"'
-                echo '✅ Node app started in background — check output.log for details.'
+                bat '''
+                start "NodeServer" cmd /c "node index.js > output.log 2>&1"
+                timeout /t 5 /nobreak >nul
+                '''
+                echo '✅ Node app should now be running on http://localhost:3000'
+            }
+        }
+
+        stage('Verify Process') {
+            steps {
+                bat 'tasklist | find "node.exe" || echo ❌ Node.js not running!'
             }
         }
     }
