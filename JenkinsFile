@@ -19,10 +19,8 @@ pipeline {
         stage('Run App') {
             steps {
                 echo 'Starting Node app on port 3000 (background)...'
-                bat '''
-                start "NodeServer" cmd /c "node index.js > output.log 2>&1"
-                timeout /t 5 /nobreak >nul
-                '''
+                // Run Node in detached background mode
+                bat 'start "NodeServer" /MIN cmd /c "node index.js > output.log 2>&1"'
                 echo '✅ Node app should now be running on http://localhost:3000'
             }
         }
